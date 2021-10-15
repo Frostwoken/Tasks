@@ -21,7 +21,7 @@ contract Queue {
     }
 
     function dequeue() public checkOwnerAndAccept {
-        require(queue.length != 0, 105, "Queue is empty");
+        require(queue.length != 0, 105, "Queue is empty.");
         if (queue.length == 1)
             delete queue;
         else
