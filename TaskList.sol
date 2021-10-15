@@ -7,12 +7,16 @@ contract TaskList {
         uint32 timestamp;
         bool taskCompleted;
     }
-    
     mapping (int8 => task) tasks;
-
     int8 index = 0;
     int8 taskCounter = 0;
 
+    constructor() public {
+        require(tvm.pubkey() != 0, 101);
+        require(msg.pubkey() == tvm.pubkey(), 102);
+        tvm.accept();
+    }
+    
     modifier checkOwnerAndAccept {
 	require(msg.pubkey() == tvm.pubkey(), 102);
 	tvm.accept();
