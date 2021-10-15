@@ -16,7 +16,7 @@ contract Multiplier {
 	_;
     }
     
-    function multiply(uint value) public checkOwnerAndAccept {
+    function multiply(uint8 value) public checkOwnerAndAccept {
         require(value >= 1 && value <= 10);
         product *= value;
     }
