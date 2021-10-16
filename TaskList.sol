@@ -8,12 +8,14 @@ contract TaskList {
         bool taskCompleted;
     }
     mapping (int8 => task) tasks;
-    int8 index = 0;
-    int8 taskCounter = 0;
+    int8 index;
+    int8 taskCounter;
 
     constructor() public {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
+        index = 0;
+        taskCounter = 0;
         tvm.accept();
     }
     
