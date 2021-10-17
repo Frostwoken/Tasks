@@ -2,12 +2,12 @@ pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
 contract TaskList {
-    struct task {
+    struct Task {
         string taskName;
         uint32 timestamp;
         bool taskCompleted;
     }
-    mapping (int8 => task) tasks;
+    mapping (int8 => Task) tasks;
     int8 index = 0;
     int8 taskCounter = 0;
 
@@ -24,7 +24,7 @@ contract TaskList {
     }
 
     function addTask(string taskName) public checkOwnerAndAccept {
-        task newTask = task(taskName, now, false);
+        Task newTask = Task(taskName, now, false);
         tasks[index] = newTask;
         index++;
         taskCounter++;
@@ -34,12 +34,12 @@ contract TaskList {
         return taskCounter;
     }
     
-    function getListOfTasks() public view returns (mapping (int8 => task)) {
+    function getListOfTasks() public view returns (mapping (int8 => Task)) {
         require(taskCounter != 0, 100, "No tasks found.");
         return tasks;
     }
 
-    function getTaskDescriptionByKey(int8 key) public view returns (task) {
+    function getTaskDescriptionByKey(int8 key) public view returns (Task) {
         require(tasks.exists(key), 100, "Key not found.");
         return tasks[key];
     }
