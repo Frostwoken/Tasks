@@ -22,13 +22,8 @@ contract Queue {
 
     function dequeue() public checkOwnerAndAccept {
         require(queue.length != 0, 105, "Queue is empty.");
-        if (queue.length == 1)
-            queue.pop();
-        else
-        {
-            for (uint i = 0; i < queue.length - 1; ++i)
-                queue[i] = queue[i + 1];
-            queue.pop();
-        }
+        for (uint i = 0; i < queue.length - 1; ++i)
+            queue[i] = queue[i + 1];
+        queue.pop();
     }
 }
