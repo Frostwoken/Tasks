@@ -30,7 +30,7 @@ contract TaskList {
         openTaskCount++;
     }
 
-    function getNumberOfOpenTasks() public view returns (int8) {
+    function getNumberOfTasks() public view returns (int8) {
         return openTaskCount;
     }
     
