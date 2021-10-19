@@ -24,8 +24,8 @@ contract TaskList {
     }
 
     function addTask(string name) public checkOwnerAndAccept {
-        Task newTask = Task(name, now, false);
-        tasks[taskCount] = newTask;
+        Task task = Task(name, now, false);
+        tasks[taskCount] = task;
         taskCount++;
         openTaskCount++;
     }
@@ -34,12 +34,12 @@ contract TaskList {
         return openTaskCount;
     }
     
-    function getListOfTasks() public checkOwnerAndAccept returns (Task[]) {
+    function getListOfTasks() public checkOwnerAndAccept returns (mapping (int8 => Task)) {
         require(openTaskCount != 0, 100, "No tasks found.");
-        Task[] openTasks;
+        mapping (int8 => Task) openTasks;
         for (int8 i = 0; i < taskCount; ++i)
             if (tasks.exists(i) && tasks[i].isCompleted == false)
-                openTasks.push(tasks[i]);
+                openTasks[i] = tasks[i];
         return openTasks;
     }
 
@@ -53,11 +53,13 @@ contract TaskList {
         if (tasks[key].isCompleted == false)
             openTaskCount--;
         delete tasks[key];
+        return;
     }
 
     function completeTask(int8 key) public checkOwnerAndAccept {
         require(tasks.exists(key), 100, "Key not found.");
         tasks[key].isCompleted = true;
         openTaskCount--;
+        return;
     }
 }
