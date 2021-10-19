@@ -53,13 +53,11 @@ contract TaskList {
         if (tasks[key].isCompleted == false)
             openTaskCount--;
         delete tasks[key];
-        return;
     }
 
     function completeTask(int8 key) public checkOwnerAndAccept {
         require(tasks.exists(key), 100, "Key not found.");
         tasks[key].isCompleted = true;
         openTaskCount--;
-        return;
     }
 }
