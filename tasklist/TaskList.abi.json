@@ -19,7 +19,7 @@
 			]
 		},
 		{
-			"name": "getNumberOfOpenTasks",
+			"name": "getNumberOfTasks",
 			"inputs": [
 			],
 			"outputs": [

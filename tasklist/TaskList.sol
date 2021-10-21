@@ -7,6 +7,7 @@ contract TaskList {
         uint32 timestamp;
         bool isCompleted;
     }
+
     mapping (int8 => Task) tasks;
     int8 taskCount = 0;
     int8 openTaskCount = 0;
@@ -17,15 +18,14 @@ contract TaskList {
         tvm.accept();
     }
     
-    modifier checkOwnerAndAccept {
+    modifier onlyOwner {
 	require(msg.pubkey() == tvm.pubkey(), 102);
-	tvm.accept();
 	_;
     }
 
-    function addTask(string name) public checkOwnerAndAccept {
-        Task task = Task(name, now, false);
-        tasks[taskCount] = task;
+    function addTask(string name) public onlyOwner {
+        tvm.accept();
+        tasks[taskCount] = Task(name, now, false);
         taskCount++;
         openTaskCount++;
     }
@@ -34,8 +34,9 @@ contract TaskList {
         return openTaskCount;
     }
     
-    function getListOfTasks() public checkOwnerAndAccept returns (mapping (int8 => Task)) {
+    function getListOfTasks() public onlyOwner returns (mapping (int8 => Task)) {
         require(openTaskCount != 0, 100, "No tasks found.");
+        tvm.accept();
         mapping (int8 => Task) openTasks;
         for (int8 i = 0; i < taskCount; ++i)
             if (tasks.exists(i) && tasks[i].isCompleted == false)
@@ -48,15 +49,17 @@ contract TaskList {
         return tasks[key];
     }
 
-    function deleteTaskByKey(int8 key) public checkOwnerAndAccept {
+    function deleteTaskByKey(int8 key) public onlyOwner {
         require(tasks.exists(key), 100, "Key not found.");
+        tvm.accept();
         if (tasks[key].isCompleted == false)
             openTaskCount--;
         delete tasks[key];
     }
 
-    function completeTask(int8 key) public checkOwnerAndAccept {
+    function completeTask(int8 key) public onlyOwner {
         require(tasks.exists(key), 100, "Key not found.");
+        tvm.accept();
         tasks[key].isCompleted = true;
         openTaskCount--;
     }

@@ -10,14 +10,14 @@ contract Multiplier {
         tvm.accept();
     }
 
-    modifier checkOwnerAndAccept {
+    modifier onlyOwner {
 	require(msg.pubkey() == tvm.pubkey(), 102);
-	tvm.accept();
 	_;
     }
     
-    function multiply(uint8 value) public checkOwnerAndAccept {
+    function multiply(uint8 value) public onlyOwner {
         require(value >= 1 && value <= 10);
+        tvm.accept();
         product *= value;
     }
 }
