@@ -19,7 +19,7 @@ contract Wallet {
 
     modifier checkOwnerAndAccept {
 	require(msg.pubkey() == tvm.pubkey(), 102);
-    tvm.accept();
+    	tvm.accept();
 	_;
     }
 
