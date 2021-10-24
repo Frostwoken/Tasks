@@ -7,7 +7,6 @@ contract TaskList {
         uint32 timestamp;
         bool isCompleted;
     }
-
     mapping (int8 => Task) tasks;
     int8 taskCount = 0;
     int8 openTaskCount = 0;

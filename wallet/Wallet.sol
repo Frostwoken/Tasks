@@ -2,14 +2,13 @@ pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
 contract Wallet {
-    struct Image {
+    struct Token {
         string name;
         string description;
         bool isForSale;
         uint price;
     }
-
-    Image[] images;
+    Token[] tokens;
     mapping (uint => uint) owners;
 
     constructor() public {
@@ -25,18 +24,18 @@ contract Wallet {
     }
 
     function createImageToken(string name, string description) public {
-        for (uint i = 0; i < images.length; ++i)
-            require(images[i].name != name, 100, "Name of your image must be unique.");
+        for (uint i = 0; i < tokens.length; ++i)
+            require(tokens[i].name != name, 100, "Name of your image must be unique.");
         tvm.accept();
-        images.push(Image(name, description, false, 0));
-        owners[images.length - 1] = msg.pubkey();
+        tokens.push(Token(name, description, false, 0));
+        owners[tokens.length - 1] = msg.pubkey();
     }
 
     function setImageTokenForSale(uint tokenId, uint price) public {
         require(owners[tokenId] == msg.pubkey(), 100, "You are not the owner of the specified token");
         tvm.accept();
-        images[tokenId].isForSale = true;
-        images[tokenId].price = price;
+        tokens[tokenId].isForSale = true;
+        tokens[tokenId].price = price;
     }
 
     function send(address destination, uint128 value) public pure checkOwnerAndAccept {
