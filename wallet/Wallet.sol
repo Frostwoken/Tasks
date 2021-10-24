@@ -23,15 +23,15 @@ contract Wallet {
 	_;
     }
 
-    function createImageToken(string name, string description) public {
+    function createToken(string name, string description) public {
         for (uint i = 0; i < tokens.length; ++i)
-            require(tokens[i].name != name, 100, "Name of your image must be unique.");
+            require(tokens[i].name != name, 100, "Name of your token must be unique.");
         tvm.accept();
         tokens.push(Token(name, description, false, 0));
         owners[tokens.length - 1] = msg.pubkey();
     }
 
-    function setImageTokenForSale(uint tokenId, uint price) public {
+    function setTokenForSale(uint tokenId, uint price) public {
         require(owners[tokenId] == msg.pubkey(), 100, "You are not the owner of the specified token");
         tvm.accept();
         tokens[tokenId].isForSale = true;
