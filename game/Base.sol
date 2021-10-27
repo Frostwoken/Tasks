@@ -28,9 +28,11 @@ contract Base is GameObject {
         for (uint8 i = 0; i < units.length; ++i)
         {
             if (units[i] == unit)
+            {
                 for (uint8 j = i; j < units.length - 1; ++j)
                     units[j] = units[j + 1];
                 units.pop();
+            }
         }
     }
 
