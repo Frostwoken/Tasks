@@ -1,0 +1,91 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"base","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getProtectionPower",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getAttackPower",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "attack",
+			"inputs": [
+				{"name":"target","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "processDeathBecauseOfBase",
+			"inputs": [
+				{"name":"sender","type":"address"},
+				{"name":"attacker","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "takeTheAttack",
+			"inputs": [
+				{"name":"damage","type":"uint8"},
+				{"name":"attacker","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "health",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"health","type":"int32"}
+			]
+		},
+		{
+			"name": "baseAddress",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"baseAddress","type":"address"}
+			]
+		},
+		{
+			"name": "damage",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"damage","type":"uint8"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"health","type":"int32"},
+		{"name":"baseAddress","type":"address"},
+		{"name":"damage","type":"uint8"}
+	]
+}

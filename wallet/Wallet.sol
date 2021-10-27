@@ -46,7 +46,7 @@ contract Wallet {
         destination.transfer(value, true, 1);
     }
 
-    function sendAllAndDestroy(address destination, uint128 value) public pure checkOwnerAndAccept {
-        destination.transfer(value, true, 128 + 32);
+    function sendAllAndDestroy(address destination) public pure checkOwnerAndAccept {
+        destination.transfer(1, true, 128 + 32);
     }
 }
