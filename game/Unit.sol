@@ -7,7 +7,7 @@ abstract contract Unit is GameObject {
     address public baseAddress;
     uint8 public damage = 1;
 
-    constructor(BaseStation.Base base) public {
+    constructor(BaseStation.Base base) internal {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();

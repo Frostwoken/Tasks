@@ -5,7 +5,7 @@ import "IGameObject.sol";
 abstract contract GameObject is IGameObject {
     int32 public health = 5;
 
-    constructor() public {
+    constructor() internal {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
