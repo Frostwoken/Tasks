@@ -1,10 +1,9 @@
 pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
-import 'Unit.sol';
-import 'Base.sol';
+import "Unit.sol";
+import "Base.sol";
 
 contract Archer is Unit {
-    
     constructor(Base base) Unit(base) public {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);

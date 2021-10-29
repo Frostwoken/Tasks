@@ -1,6 +1,6 @@
 pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
-import 'IGameObject.sol';
+import "IGameObject.sol";
 
 abstract contract GameObject is IGameObject {
     int32 public health = 5;

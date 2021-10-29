@@ -1,7 +1,7 @@
 pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
-import 'GameObject.sol';
-import 'Unit.sol';
+import "GameObject.sol";
+import "Unit.sol";
 
 contract Base is GameObject {
     address[] public units;
@@ -37,12 +37,8 @@ contract Base is GameObject {
     }
 
     function processDeath(address attacker) override internal view {
-        tvm.accept();
         for (uint8 i = 0; i < units.length; ++i)
-        {
-            Unit current = Unit(units[i]);
-            current.processDeathBecauseOfBase(this, attacker);
-        }
+            Unit(units[i]).processDeathBecauseOfBase(this, attacker);
         sendAllAndDestroy(attacker);
     }
 }

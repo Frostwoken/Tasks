@@ -1,7 +1,7 @@
 pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
-import 'GameObject.sol';
-import 'Base.sol' as BaseStation;
+import "GameObject.sol";
+import "Base.sol" as BaseStation;
 
 abstract contract Unit is GameObject {
     address public baseAddress;
@@ -11,8 +11,8 @@ abstract contract Unit is GameObject {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
-        baseAddress = base;
         base.addUnit(this);
+        baseAddress = base;
     }
 
     function attack(IGameObject target) public {
@@ -25,8 +25,7 @@ abstract contract Unit is GameObject {
     function getAttackPower() virtual public;
 
     function processDeath(address attacker) override internal view {
-        BaseStation.Base base = BaseStation.Base(baseAddress);
-        base.removeUnit(this);
+        BaseStation.Base(baseAddress).removeUnit(this);
         sendAllAndDestroy(attacker);
     }
 
