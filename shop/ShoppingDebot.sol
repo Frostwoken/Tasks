@@ -11,19 +11,18 @@ import "../debots/ConfirmInput.sol";
 import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
-abstract contract Initializer is Debot, Upgradable {
-    bytes m_icon;
-    TvmCell internal state;
+abstract contract ShoppingDebot is Debot, Upgradable {
+    TvmCell internal stateInit;
     uint internal userPubkey;
     address internal contractAddress;
     address internal walletAddress;
     Summary internal information;
     uint32 internal constant initialBalance = 200000000; 
 
-    function setCode(TvmCell code, TvmCell data) public {
+    function buildStateInit(TvmCell code, TvmCell data) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
         tvm.accept();
-        state = tvm.buildStateInit(code, data);
+        stateInit = tvm.buildStateInit(code, data);
     }
 
     function start() override public {
@@ -36,7 +35,7 @@ abstract contract Initializer is Debot, Upgradable {
         {
             userPubkey = result;
             Terminal.print(0, "Checking if you already have a shopping list...");
-            TvmCell deployState = tvm.insertPubkey(state, userPubkey);
+            TvmCell deployState = tvm.insertPubkey(stateInit, userPubkey);
             contractAddress = address.makeAddrStd(0, tvm.hash(deployState));
             Terminal.print(0, format("Your shopping list contract address is {}", contractAddress));
             Sdk.getAccountType(tvm.functionId(checkAccountType), contractAddress);
@@ -114,13 +113,14 @@ abstract contract Initializer is Debot, Upgradable {
         topUpAccount(walletAddress);
     }
 
-    function deploy() internal view {
-        TvmCell deployState = tvm.insertPubkey(state, userPubkey);
+    function deploy() internal {
+        Terminal.print(0, format("Deploying..."));
+        TvmCell deployState = tvm.insertPubkey(stateInit, userPubkey);
         optional(uint256) none;
         TvmCell deployMsg = tvm.buildExtMsg({
             abiVer: 2,
             dest: contractAddress,
-            callbackId: tvm.functionId(onSuccess),
+            callbackId: 0,
             onErrorId: tvm.functionId(repeatDeploy),
             time: 0,
             expire: 0,
@@ -130,9 +130,11 @@ abstract contract Initializer is Debot, Upgradable {
             call: {HasConstructorWithPubKey, userPubkey}
         });
         tvm.sendrawmsg(deployMsg, 1);
+        Terminal.print(0, format("Done!"));
+        onSuccess();
     }
 
-    function repeatDeploy(uint32 sdkError, uint32 exitCode) public view {
+    function repeatDeploy(uint32 sdkError, uint32 exitCode) public {
         sdkError;
         exitCode;
         deploy();
@@ -148,22 +150,6 @@ abstract contract Initializer is Debot, Upgradable {
     }
 
     function showMenu() public virtual;
-
-    function getDebotInfo() public functionID(0xDEB) override view returns(
-        string name, string version, string publisher, string key, string author,
-        address support, string hello, string language, string dabi, bytes icon
-    ) {
-        name = "TODO DeBot";
-        version = "0.2.0";
-        publisher = "TON Labs";
-        key = "TODO list manager";
-        author = "TON Labs";
-        support = address.makeAddrStd(0, 0x66e01d6df5a8d7677d9ab2daf7f258f1e2a7fe73da5320300395f99e01dc3b5f);
-        hello = "Hi, i'm a TODO DeBot.";
-        language = "en";
-        dabi = m_debotAbi.get();
-        icon = m_icon;
-    }
 
     function onCodeUpgrade() internal override {
         tvm.resetStorage();

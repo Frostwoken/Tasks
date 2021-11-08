@@ -3,14 +3,14 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
-			"name": "_menu",
+			"name": "showMenu",
 			"inputs": [
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "enterPurchaseNumber",
+			"name": "enterName",
 			"inputs": [
 				{"name":"index","type":"uint32"}
 			],
@@ -18,7 +18,7 @@
 			]
 		},
 		{
-			"name": "enterPurchasePrice",
+			"name": "enterQuantity",
 			"inputs": [
 				{"name":"value","type":"bytes"}
 			],
@@ -26,7 +26,7 @@
 			]
 		},
 		{
-			"name": "buy",
+			"name": "addPurchase",
 			"inputs": [
 				{"name":"value","type":"bytes"}
 			],
@@ -66,7 +66,25 @@
 			]
 		},
 		{
-			"name": "setCode",
+			"name": "getDebotInfo",
+			"id": "0xDEB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"bytes"},
+				{"name":"version","type":"bytes"},
+				{"name":"publisher","type":"bytes"},
+				{"name":"key","type":"bytes"},
+				{"name":"author","type":"bytes"},
+				{"name":"support","type":"address"},
+				{"name":"hello","type":"bytes"},
+				{"name":"language","type":"bytes"},
+				{"name":"dabi","type":"bytes"},
+				{"name":"icon","type":"bytes"}
+			]
+		},
+		{
+			"name": "buildStateInit",
 			"inputs": [
 				{"name":"code","type":"cell"},
 				{"name":"data","type":"cell"}
@@ -160,24 +178,6 @@
 				{"name":"exitCode","type":"uint32"}
 			],
 			"outputs": [
-			]
-		},
-		{
-			"name": "getDebotInfo",
-			"id": "0xDEB",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"name","type":"bytes"},
-				{"name":"version","type":"bytes"},
-				{"name":"publisher","type":"bytes"},
-				{"name":"key","type":"bytes"},
-				{"name":"author","type":"bytes"},
-				{"name":"support","type":"address"},
-				{"name":"hello","type":"bytes"},
-				{"name":"language","type":"bytes"},
-				{"name":"dabi","type":"bytes"},
-				{"name":"icon","type":"bytes"}
 			]
 		},
 		{
