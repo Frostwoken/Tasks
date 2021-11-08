@@ -45,14 +45,14 @@ abstract contract ShoppingDebot is Debot, Upgradable {
     }
 
     function checkAccountType(int8 acc_type) public {
-        if (acc_type == 1)  // acc is active and contract is already deployed
+        if (acc_type == 1) 
             getSummary(tvm.functionId(setSummary));
-        else if (acc_type == -1) // acc is inactive
+        else if (acc_type == -1)
         {
             Terminal.print(0, "You don't have a shopping list yet, so a new contract with an initial balance of 0.2 tokens will be deployed.");
             AddressInput.get(tvm.functionId(topUpAccount), "Select a wallet for payment. We will ask you to sign two transactions.");
         } 
-        else if (acc_type == 0)  // acc is uninitialized
+        else if (acc_type == 0)
         {
             Terminal.print(0, format("Deploying new contract. If an error occurs, check if your shopping list contract has enough tokens on its balance."));
             deploy();
