@@ -16,8 +16,8 @@ contract ShoppingList is IShoppingList {
     }
 
     modifier onlyOwner() {
-    require(msg.pubkey() == ownerPubkey, 101);
-    _;
+        require(msg.pubkey() == ownerPubkey, 101);
+        _;
     }
 
     function addPurchase(string name, uint32 quantity) override public onlyOwner {
