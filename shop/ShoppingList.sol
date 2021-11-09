@@ -27,8 +27,6 @@ contract ShoppingList is IShoppingList {
     }
 
     function deletePurchase(uint32 id) override public onlyOwner {
-        require(m_purchases.exists(id) && m_purchases[id].isBought != true, 102, "The key does not exist or you are trying to delete" 
-                                                                                  "a purchase for which money has already been paid.");
         tvm.accept();
         delete m_purchases[id];
     }
