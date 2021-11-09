@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "DataStructures.sol";
-import "ShoppingDebot.sol";
+import "ShoppingDeBot.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
 import "../debots/Menu.sol";
@@ -12,7 +12,7 @@ import "../debots/ConfirmInput.sol";
 import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
-contract ProcessingPurchasesDeBot is ShoppingDebot {
+contract ProcessingPurchasesDeBot is ShoppingDeBot {
     uint32 purchaseNumber;
 
     function showMenu() override public {

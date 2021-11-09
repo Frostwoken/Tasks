@@ -11,7 +11,7 @@ import "../debots/ConfirmInput.sol";
 import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
-abstract contract ShoppingDebot is Debot, Upgradable {
+abstract contract ShoppingDeBot is Debot, Upgradable {
     TvmCell internal stateInit;
     uint internal userPubkey;
     address internal contractAddress;
