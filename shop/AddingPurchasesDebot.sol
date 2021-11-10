@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "DataStructures.sol";
-import "ShoppingDeBot.sol";
+import "ShoppingDebot.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
 import "../debots/Menu.sol";
@@ -12,7 +12,7 @@ import "../debots/ConfirmInput.sol";
 import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
-contract AddingPurchasesDeBot is ShoppingDeBot {
+contract AddingPurchasesDebot is ShoppingDebot {
     string purchaseName;
 
     function showMenu() override public {
@@ -26,14 +26,14 @@ contract AddingPurchasesDeBot is ShoppingDeBot {
             ),
             sep,
             [
-                MenuItem("Add purchase", "", tvm.functionId(enterName)),
+                MenuItem("Add purchase", "", tvm.functionId(enterPurchaseName)),
                 MenuItem("Show shopping list", "", tvm.functionId(getShoppingList)),
                 MenuItem("Delete purchase", "", tvm.functionId(enterPurchaseNumberToDelete))
             ]
         );
     }
 
-    function enterName(uint32 index) public {
+    function enterPurchaseName(uint32 index) public {
         Terminal.input(tvm.functionId(enterQuantity), "Enter purchase name.", false);
     }
 

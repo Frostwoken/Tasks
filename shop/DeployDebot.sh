@@ -16,7 +16,7 @@ GIVER_NAME=Giver
 CONTRACT_NAME=ShoppingList
 NETWORK="${2:-https://net.ton.dev}"
 # My giver address
-GIVER_ADDRESS=0:07c990be6db2cd750b0dd184c9332da2a0d37933565e523641c587c1af40fc5f
+GIVER_ADDRESS=0:2105523b014653c8f00ee01117a3eee3dd9fff1537a4b718b526a8bac82b2ba4
  
 tos=./tonos-cli
 if $tos --version > /dev/null 2>&1; then
