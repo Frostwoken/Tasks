@@ -16,7 +16,7 @@ GIVER_NAME=Giver
 CONTRACT_NAME=ShoppingList
 NETWORK="${2:-https://net.ton.dev}"
 # My giver address
-GIVER_ADDRESS=0:2105523b014653c8f00ee01117a3eee3dd9fff1537a4b718b526a8bac82b2ba4
+GIVER_ADDRESS=0:ca43dc0a4da1bcf379e77bf0bba3d98533b92bef008a091383052426dcf900a1
  
 tos=./tonos-cli
 if $tos --version > /dev/null 2>&1; then
@@ -33,7 +33,7 @@ fi
 
 function topUpAccount {
     $tos --url $NETWORK call $GIVER_ADDRESS \
-    sendAndPayFees "{\"destination\":\"$1\",\"value\":1000000000}" \
+    sendTransaction "{\"dest\":\"$1\",\"value\":1000000000}" \
     --abi $GIVER_NAME.abi.json \
     --sign $GIVER_NAME.keys.json
 }

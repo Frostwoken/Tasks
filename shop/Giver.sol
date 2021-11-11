@@ -8,18 +8,8 @@ contract Giver {
         tvm.accept();
     }
 
-    function send(address destination, uint128 value) public pure {
+    function sendTransaction(address dest, uint128 value) public pure {
         tvm.accept();
-        destination.transfer(value, false, 0);
-    }
-
-    function sendAndPayFees(address destination, uint128 value) public pure {
-        tvm.accept();
-        destination.transfer(value, false, 1);
-    }
-
-    function sendAllAndDestroy(address destination) public pure {
-        tvm.accept();
-        destination.transfer(1, false, 128 + 32);
+        dest.transfer(value, false, 1);
     }
 }
