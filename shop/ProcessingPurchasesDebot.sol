@@ -15,11 +15,11 @@ import "../debots/Sdk.sol";
 contract ProcessingPurchasesDebot is ShoppingDebot {
     uint32 purchaseNumber;
 
-    function showMenu() override public {
+    function showMenu() override internal {
         string sep = '----------------------------------------';
         Menu.select(
             format(
-                "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}.",
+                "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}",
                     information.paidPurchasesNumber,
                     information.unpaidPurchasesNumber,
                     information.paidAmount
@@ -34,7 +34,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
     }
 
     function enterPurchaseNumber(uint32 index) public {
-        Terminal.input(tvm.functionId(enterPurchasePrice), "Enter purchase number.", false);
+        Terminal.input(tvm.functionId(enterPurchasePrice), "Enter purchase number", false);
     }
 
     function enterPurchasePrice(string value) public {
@@ -42,10 +42,10 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
         if (status == true)
         {
             purchaseNumber = uint32(result);
-            Terminal.input(tvm.functionId(buy), "Enter purchase price.", false);
+            Terminal.input(tvm.functionId(buy), "Enter purchase price", false);
         }
         else
-            Terminal.input(tvm.functionId(enterPurchaseNumber), "Wrong data, try again.\n", false);
+            Terminal.input(tvm.functionId(enterPurchaseNumber), "Wrong data, try again\n", false);
     }
 
     function buy(string value) public {
@@ -62,7 +62,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
                 onErrorId: tvm.functionId(onError)
             }(purchaseNumber, uint32(price));
         else
-            Terminal.input(tvm.functionId(enterPurchasePrice), "Wrong data, try again.\n", false);
+            Terminal.input(tvm.functionId(enterPurchasePrice), "Wrong data, try again\n", false);
     }
 
     function getShoppingList(uint32 index) public view {
@@ -91,21 +91,21 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}.", purchases[i].number, purchases[i].name, 
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchases[i].number, purchases[i].name, 
                                                                 purchases[i].quantity, purchases[i].createdAt, purchases[i].price, purchaseStatus));
             }
         }
         else
-            Terminal.print(0, "Your shopping list is empty.");
+            Terminal.print(0, "Your shopping list is empty");
         onSuccess();
     }
 
     function enterPurchaseNumberToDelete(uint32 index) public {
         if (information.paidPurchasesNumber + information.unpaidPurchasesNumber > 0)
-            Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number.", false);
+            Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number", false);
         else 
         {
-            Terminal.print(0, "Sorry, you have no purchases to delete.");
+            Terminal.print(0, "Sorry, you have no purchases to delete");
             showMenu();
         }
     }
@@ -126,15 +126,21 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
             }(uint32(id));
         }
         else
-            Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again.\n", false);
+            Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again\n", false);
     }
 
     function getDebotInfo() public functionID(0xDEB) override view returns(string name, string version, string publisher, string key, string author,
                                                                             address support, string hello, string language, string dabi, bytes icon) 
     {
-        name = "Processing purchases DeBot";
-        hello = "Hi, i'm a processing purchases DeBot.";
+        name = "Adding purchases DeBot";
+        version;
+        publisher;
+        key;
+        author;
+        support;
+        hello = "Hello!";
         language = "en";
         dabi = m_debotAbi.get();
+        icon;
     }
 }

@@ -3,16 +3,8 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
-			"name": "showMenu",
+			"name": "enterPurchaseName",
 			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "enterName",
-			"inputs": [
-				{"name":"index","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -36,7 +28,6 @@
 		{
 			"name": "getShoppingList",
 			"inputs": [
-				{"name":"index","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -52,7 +43,6 @@
 		{
 			"name": "enterPurchaseNumberToDelete",
 			"inputs": [
-				{"name":"index","type":"uint32"}
 			],
 			"outputs": [
 			]

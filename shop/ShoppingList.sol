@@ -15,25 +15,23 @@ contract ShoppingList is IShoppingList {
         ownerPubkey = pubkey;
     }
 
-    modifier onlyOwner() {
-        require(msg.pubkey() == ownerPubkey, 101);
-        _;
+    modifier checkOwnerAndAccept {
+	    require(msg.pubkey() == tvm.pubkey(), 102);
+    	tvm.accept();
+	_;
     }
 
-    function addPurchase(string name, uint32 quantity) override public onlyOwner {
-        tvm.accept();
+    function addPurchase(string name, uint32 quantity) override public checkOwnerAndAccept {
         m_purchases[purchaseNumber] = Purchase(purchaseNumber, name, quantity, now, false, 0);
         purchaseNumber++;
     }
 
-    function deletePurchase(uint32 id) override public onlyOwner {
-        tvm.accept();
+    function deletePurchase(uint32 id) override public checkOwnerAndAccept {
         delete m_purchases[id];
     }
 
-    function buy(uint32 id, uint32 price) override public onlyOwner {
+    function buy(uint32 id, uint32 price) override public checkOwnerAndAccept {
         require(m_purchases.exists(id), 102, "There are no item(s) to buy for this number.");
-        tvm.accept();
         m_purchases[id].isBought = true;
         m_purchases[id].price = price;
     }

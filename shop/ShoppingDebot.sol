@@ -12,12 +12,12 @@ import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
 abstract contract ShoppingDebot is Debot, Upgradable {
-    TvmCell internal stateInit;
-    uint internal userPubkey;
-    address internal contractAddress;
-    address internal walletAddress;
-    Summary internal information;
-    uint32 internal constant initialBalance = 200000000; 
+    TvmCell stateInit;
+    uint userPubkey;
+    address contractAddress;
+    address walletAddress;
+    Summary information;
+    uint32 constant initialBalance = 200000000; 
 
     function buildStateInit(TvmCell code, TvmCell data) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
@@ -26,7 +26,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
     }
 
     function start() override public {
-        Terminal.input(tvm.functionId(generateContractAddress), "Please enter your public key.", false);
+        Terminal.input(tvm.functionId(generateContractAddress), "Please enter your public key", false);
     }
 
     function generateContractAddress(string value) public {
@@ -41,7 +41,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
             Sdk.getAccountType(tvm.functionId(checkAccountType), contractAddress);
         } 
         else
-            Terminal.input(tvm.functionId(generateContractAddress), "Wrong public key. Try again.\nPlease enter your public key.", false);
+            Terminal.input(tvm.functionId(generateContractAddress), "Wrong public key. Try again\nPlease enter your public key", false);
     }
 
     function checkAccountType(int8 acc_type) public {
@@ -49,19 +49,19 @@ abstract contract ShoppingDebot is Debot, Upgradable {
             getSummary(tvm.functionId(setSummary));
         else if (acc_type == -1)
         {
-            Terminal.print(0, "You don't have a shopping list yet, so a new contract with an initial balance of 0.2 tokens will be deployed.");
-            AddressInput.get(tvm.functionId(topUpAccount), "Select a wallet for payment. We will ask you to sign two transactions.");
+            Terminal.print(0, "You don't have a shopping list yet, so a new contract with an initial balance of 0.2 tokens will be deployed");
+            AddressInput.get(tvm.functionId(topUpAccount), "Select a wallet for payment. We will ask you to sign two transactions");
         } 
         else if (acc_type == 0)
         {
-            Terminal.print(0, format("Deploying new contract. If an error occurs, check if your shopping list contract has enough tokens on its balance."));
+            Terminal.print(0, format("Deploying new contract. If an error occurs, check if your shopping list contract has enough tokens on its balance"));
             deploy();
         } 
         else if (acc_type == 2) 
-            Terminal.print(0, format("Can not continue: account {} is frozen.", contractAddress));
+            Terminal.print(0, format("Can not continue: account {} is frozen", contractAddress));
     }
 
-    function getSummary(uint32 answerId) internal view {
+    function getSummary(uint32 answerId) private view {
         optional(uint256) none;
         IShoppingList(contractAddress).getSummary{
             abiVer: 2,
@@ -113,7 +113,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
         topUpAccount(walletAddress);
     }
 
-    function deploy() internal {
+    function deploy() private {
         Terminal.print(0, format("Deploying..."));
         TvmCell deployState = tvm.insertPubkey(stateInit, userPubkey);
         optional(uint256) none;
@@ -149,7 +149,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
         showMenu();
     }
 
-    function showMenu() public virtual;
+    function showMenu() internal virtual;
 
     function onCodeUpgrade() internal override {
         tvm.resetStorage();

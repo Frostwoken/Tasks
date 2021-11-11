@@ -15,11 +15,11 @@ import "../debots/Sdk.sol";
 contract AddingPurchasesDebot is ShoppingDebot {
     string purchaseName;
 
-    function showMenu() override public {
+    function showMenu() override internal {
         string sep = '----------------------------------------';
         Menu.select(
             format(
-                "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}.",
+                "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}",
                     information.paidPurchasesNumber,
                     information.unpaidPurchasesNumber,
                     information.paidAmount
@@ -33,13 +33,13 @@ contract AddingPurchasesDebot is ShoppingDebot {
         );
     }
 
-    function enterPurchaseName(uint32 index) public {
-        Terminal.input(tvm.functionId(enterQuantity), "Enter purchase name.", false);
+    function enterPurchaseName() public {
+        Terminal.input(tvm.functionId(enterQuantity), "Enter purchase name", false);
     }
 
     function enterQuantity(string value) public {
         purchaseName = value;
-        Terminal.input(tvm.functionId(addPurchase), "Enter quantity.", false);
+        Terminal.input(tvm.functionId(addPurchase), "Enter quantity", false);
     }
 
     function addPurchase(string value) public {
@@ -58,11 +58,10 @@ contract AddingPurchasesDebot is ShoppingDebot {
             }(purchaseName, uint32(quantity));
         }
         else
-            Terminal.input(tvm.functionId(enterQuantity), "Wrong data, try again.\n", false);
+            Terminal.input(tvm.functionId(enterQuantity), "Wrong data, try again\n", false);
     }
 
-    function getShoppingList(uint32 index) public view {
-        index = index;
+    function getShoppingList() public view {
         optional(uint256) none;
         IShoppingList(contractAddress).getShoppingList{
             abiVer: 2,
@@ -87,21 +86,21 @@ contract AddingPurchasesDebot is ShoppingDebot {
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}.", purchases[i].number, purchases[i].name, 
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchases[i].number, purchases[i].name, 
                                                                 purchases[i].quantity, purchases[i].createdAt, purchases[i].price, purchaseStatus));
             }
         } 
         else
-            Terminal.print(0, "Your shopping list is empty.");
+            Terminal.print(0, "Your shopping list is empty");
         onSuccess();
     }
 
-    function enterPurchaseNumberToDelete(uint32 index) public {
+    function enterPurchaseNumberToDelete() public {
         if (information.paidPurchasesNumber + information.unpaidPurchasesNumber > 0)
-            Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number.", false);
+            Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number", false);
         else 
         {
-            Terminal.print(0, "Sorry, you have no purchases to delete.");
+            Terminal.print(0, "Sorry, you have no purchases to delete");
             showMenu();
         }
     }
@@ -122,15 +121,21 @@ contract AddingPurchasesDebot is ShoppingDebot {
             }(uint32(id));
         }
         else
-            Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again.\n", false);
+            Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again\n", false);
     }
 
     function getDebotInfo() public functionID(0xDEB) override view returns(string name, string version, string publisher, string key, string author,
                                                                             address support, string hello, string language, string dabi, bytes icon) 
     {
         name = "Adding purchases DeBot";
-        hello = "Hi, i'm a adding purchases DeBot.";
+        version;
+        publisher;
+        key;
+        author;
+        support;
+        hello = "Hello!";
         language = "en";
         dabi = m_debotAbi.get();
+        icon;
     }
 }

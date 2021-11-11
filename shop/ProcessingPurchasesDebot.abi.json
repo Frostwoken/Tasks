@@ -3,13 +3,6 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
-			"name": "showMenu",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "enterPurchaseNumber",
 			"inputs": [
 				{"name":"index","type":"uint32"}
