@@ -41,7 +41,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"purchaseNumber","type":"uint32"},{"name":"purchaseName","type":"bytes"},{"name":"quantity","type":"uint32"},{"name":"createdAt","type":"uint32"},{"name":"isBought","type":"bool"},{"name":"price","type":"uint32"}],"name":"value0","type":"map(uint32,tuple)"}
+				{"components":[{"name":"number","type":"uint32"},{"name":"name","type":"bytes"},{"name":"quantity","type":"uint32"},{"name":"createdAt","type":"uint32"},{"name":"isBought","type":"bool"},{"name":"price","type":"uint32"}],"name":"value0","type":"map(uint32,tuple)"}
 			]
 		},
 		{
