@@ -16,8 +16,8 @@ interface IShoppingList {
 }
 
 struct Purchase {
-    uint32 purchaseNumber;
-    string purchaseName;
+    uint32 number;
+    string name;
     uint32 quantity;
     uint32 createdAt;
     bool isBought;

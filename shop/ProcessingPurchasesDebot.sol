@@ -7,13 +7,9 @@ import "ShoppingDebot.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
 import "../debots/Menu.sol";
-import "../debots/AddressInput.sol";
-import "../debots/ConfirmInput.sol";
-import "../debots/Upgradable.sol";
-import "../debots/Sdk.sol";
 
 contract ProcessingPurchasesDebot is ShoppingDebot {
-    uint32 purchaseNumber;
+    uint32 number;
 
     function showMenu() override internal {
         string sep = '----------------------------------------';
@@ -41,7 +37,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
         (uint result, bool status) = stoi(value);
         if (status == true)
         {
-            purchaseNumber = uint32(result);
+            number = uint32(result);
             Terminal.input(tvm.functionId(buy), "Enter purchase price", false);
         }
         else
@@ -60,13 +56,12 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(purchaseNumber, uint32(price));
+            }(number, uint32(price));
         else
             Terminal.input(tvm.functionId(enterPurchasePrice), "Wrong data, try again\n", false);
     }
 
     function getShoppingList(uint32 index) public view {
-        index = index;
         optional(uint256) none;
         IShoppingList(contractAddress).getShoppingList{
             abiVer: 2,
@@ -93,7 +88,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.purchaseNumber, purchase.purchaseName, 
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.number, purchase.name, 
                                                                 purchase.quantity, purchase.createdAt, purchase.price, purchaseStatus));
                 keyValuePair = purchases.next(key);
             }
@@ -114,7 +109,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
     }
 
     function deletePurchase(string value) public {
-        (uint id, bool status) = stoi(value);
+        (uint key, bool status) = stoi(value);
         if (status == true)
         {
             IShoppingList(contractAddress).deletePurchase{
@@ -126,7 +121,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(uint32(id));
+            }(uint32(key));
         }
         else
             Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again\n", false);

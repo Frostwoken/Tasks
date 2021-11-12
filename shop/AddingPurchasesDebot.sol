@@ -7,13 +7,9 @@ import "ShoppingDebot.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
 import "../debots/Menu.sol";
-import "../debots/AddressInput.sol";
-import "../debots/ConfirmInput.sol";
-import "../debots/Upgradable.sol";
-import "../debots/Sdk.sol";
 
 contract AddingPurchasesDebot is ShoppingDebot {
-    string purchaseName;
+    string name;
 
     function showMenu() override internal {
         string sep = '----------------------------------------';
@@ -38,7 +34,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
     }
 
     function enterQuantity(string value) public {
-        purchaseName = value;
+        name = value;
         Terminal.input(tvm.functionId(addPurchase), "Enter quantity", false);
     }
 
@@ -55,7 +51,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(purchaseName, uint32(quantity));
+            }(name, uint32(quantity));
         }
         else
             Terminal.input(tvm.functionId(enterQuantity), "Wrong data, try again\n", false);
@@ -88,7 +84,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.purchaseNumber, purchase.purchaseName, 
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.number, purchase.name, 
                                                                 purchase.quantity, purchase.createdAt, purchase.price, purchaseStatus));
                 keyValuePair = purchases.next(key);
             }
@@ -109,7 +105,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
     }
 
     function deletePurchase(string value) public {
-        (uint id, bool status) = stoi(value);
+        (uint key, bool status) = stoi(value);
         if (status == true)
         {
             IShoppingList(contractAddress).deletePurchase{
@@ -121,7 +117,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(uint32(id));
+            }(uint32(key));
         }
         else
             Terminal.input(tvm.functionId(enterPurchaseNumberToDelete), "Wrong data, try again\n", false);

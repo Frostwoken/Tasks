@@ -6,7 +6,7 @@ import "DataStructures.sol";
 
 contract ShoppingList is IShoppingList {
     mapping (uint32 => Purchase) purchases;
-    uint32 purchaseNumber;
+    uint32 number;
     uint256 ownerPubkey;
 
     constructor(uint256 pubkey) public {
@@ -16,22 +16,22 @@ contract ShoppingList is IShoppingList {
     }
 
     modifier checkOwnerAndAccept {
-	    require(msg.pubkey() == tvm.pubkey(), 101);
+	require(msg.pubkey() == tvm.pubkey(), 101);
     	tvm.accept();
 	_;
     }
 
     function addPurchase(string name, uint32 quantity) override public checkOwnerAndAccept {
         if (purchases.empty())
-            purchaseNumber = 1;
-        purchases[purchaseNumber] = Purchase(purchaseNumber, name, quantity, now, false, 0);
-        purchaseNumber++;
+            number = 1;
+        purchases[number] = Purchase(number, name, quantity, now, false, 0);
+        number++;
     }
 
     function deletePurchase(uint32 key) override public checkOwnerAndAccept {
         require(purchases.exists(key), 102, "Wrong key.");
-        if (key == purchaseNumber - 1)
-            purchaseNumber = key;
+        if (key == number - 1)
+            number = key;
         delete purchases[key];
     }
 
