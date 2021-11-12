@@ -37,7 +37,7 @@
 		{
 			"name": "showShoppingList",
 			"inputs": [
-				{"components":[{"name":"number","type":"uint32"},{"name":"name","type":"bytes"},{"name":"quantity","type":"uint32"},{"name":"createdAt","type":"uint32"},{"name":"isBought","type":"bool"},{"name":"price","type":"uint32"}],"name":"purchases","type":"tuple[]"}
+				{"components":[{"name":"purchaseNumber","type":"uint32"},{"name":"purchaseName","type":"bytes"},{"name":"quantity","type":"uint32"},{"name":"createdAt","type":"uint32"},{"name":"isBought","type":"bool"},{"name":"price","type":"uint32"}],"name":"purchases","type":"map(uint32,tuple)"}
 			],
 			"outputs": [
 			]
@@ -111,7 +111,7 @@
 		{
 			"name": "setSummary",
 			"inputs": [
-				{"components":[{"name":"paidPurchasesNumber","type":"uint32"},{"name":"unpaidPurchasesNumber","type":"uint32"},{"name":"paidAmount","type":"uint32"}],"name":"summary","type":"tuple"}
+				{"components":[{"name":"paidPurchasesNumber","type":"uint32"},{"name":"unpaidPurchasesNumber","type":"uint32"},{"name":"paidAmount","type":"uint32"}],"name":"m_summary","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -179,14 +179,6 @@
 			],
 			"outputs": [
 				{"name":"interfaces","type":"uint256[]"}
-			]
-		},
-		{
-			"name": "upgrade",
-			"inputs": [
-				{"name":"state","type":"cell"}
-			],
-			"outputs": [
 			]
 		},
 		{

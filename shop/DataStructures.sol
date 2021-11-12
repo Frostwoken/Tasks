@@ -11,13 +11,13 @@ interface IShoppingList {
     function addPurchase(string name, uint32 quantity) external;
     function deletePurchase(uint32 id) external;
     function buy(uint32 id, uint32 price) external;
-    function getShoppingList() external returns (Purchase[] purchases);
+    function getShoppingList() external view returns (mapping (uint32 => Purchase));
     function getSummary() external returns (Summary summary);
 }
 
 struct Purchase {
-    uint32 number;
-    string name;
+    uint32 purchaseNumber;
+    string purchaseName;
     uint32 quantity;
     uint32 createdAt;
     bool isBought;

@@ -20,9 +20,9 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
         Menu.select(
             format(
                 "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}",
-                    information.paidPurchasesNumber,
-                    information.unpaidPurchasesNumber,
-                    information.paidAmount
+                    summary.paidPurchasesNumber,
+                    summary.unpaidPurchasesNumber,
+                    summary.paidAmount
             ),
             sep,
             [
@@ -80,28 +80,31 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
         }();
     }
 
-    function showShoppingList(Purchase[] purchases) public {
+    function showShoppingList(mapping (uint32 => Purchase) purchases) public {
         if (!purchases.empty())
         {
             string purchaseStatus;
             Terminal.print(0, format("Infromation about your purchases..."));
-            for (uint i = 0; i < purchases.length; ++i)
+            optional(uint32, Purchase) keyValuePair = purchases.min();
+            while (keyValuePair.hasValue())
             {
-                if (purchases[i].isBought == true)
+                (uint32 key, Purchase purchase) = keyValuePair.get();
+                if (purchase.isBought == true)
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchases[i].number, purchases[i].name, 
-                                                                purchases[i].quantity, purchases[i].createdAt, purchases[i].price, purchaseStatus));
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.purchaseNumber, purchase.purchaseName, 
+                                                                purchase.quantity, purchase.createdAt, purchase.price, purchaseStatus));
+                keyValuePair = purchases.next(key);
             }
-        }
+        } 
         else
             Terminal.print(0, "Your shopping list is empty");
         onSuccess();
     }
 
     function enterPurchaseNumberToDelete(uint32 index) public {
-        if (information.paidPurchasesNumber + information.unpaidPurchasesNumber > 0)
+        if (summary.paidPurchasesNumber + summary.unpaidPurchasesNumber > 0)
             Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number", false);
         else 
         {
@@ -132,7 +135,7 @@ contract ProcessingPurchasesDebot is ShoppingDebot {
     function getDebotInfo() public functionID(0xDEB) override view returns(string name, string version, string publisher, string key, string author,
                                                                             address support, string hello, string language, string dabi, bytes icon) 
     {
-        name = "Adding purchases DeBot";
+        name = "Processing purchases DeBot";
         version;
         publisher;
         key;

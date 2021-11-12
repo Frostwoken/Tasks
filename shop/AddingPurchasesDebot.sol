@@ -20,9 +20,9 @@ contract AddingPurchasesDebot is ShoppingDebot {
         Menu.select(
             format(
                 "Number of paid purchases: {}\nNumber of unpaid purchases: {}\nPaid amount: {}",
-                    information.paidPurchasesNumber,
-                    information.unpaidPurchasesNumber,
-                    information.paidAmount
+                    summary.paidPurchasesNumber,
+                    summary.unpaidPurchasesNumber,
+                    summary.paidAmount
             ),
             sep,
             [
@@ -75,19 +75,22 @@ contract AddingPurchasesDebot is ShoppingDebot {
         }();
     }
 
-    function showShoppingList(Purchase[] purchases) public {
+    function showShoppingList(mapping (uint32 => Purchase) purchases) public {
         if (!purchases.empty())
         {
             string purchaseStatus;
             Terminal.print(0, format("Infromation about your purchases..."));
-            for (uint i = 0; i < purchases.length; ++i)
+            optional(uint32, Purchase) keyValuePair = purchases.min();
+            while (keyValuePair.hasValue())
             {
-                if (purchases[i].isBought == true)
+                (uint32 key, Purchase purchase) = keyValuePair.get();
+                if (purchase.isBought == true)
                     purchaseStatus = "purchased";
                 else
                     purchaseStatus = 'not purchased';
-                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchases[i].number, purchases[i].name, 
-                                                                purchases[i].quantity, purchases[i].createdAt, purchases[i].price, purchaseStatus));
+                Terminal.print(0, format("{}: {}, {}, created at {} for price {}. Purchase status: {}", purchase.purchaseNumber, purchase.purchaseName, 
+                                                                purchase.quantity, purchase.createdAt, purchase.price, purchaseStatus));
+                keyValuePair = purchases.next(key);
             }
         } 
         else
@@ -96,7 +99,7 @@ contract AddingPurchasesDebot is ShoppingDebot {
     }
 
     function enterPurchaseNumberToDelete() public {
-        if (information.paidPurchasesNumber + information.unpaidPurchasesNumber > 0)
+        if (summary.paidPurchasesNumber + summary.unpaidPurchasesNumber > 0)
             Terminal.input(tvm.functionId(deletePurchase), "Enter purchase number", false);
         else 
         {

@@ -5,9 +5,9 @@ pragma AbiHeader pubkey;
 import "DataStructures.sol";
 
 contract ShoppingList is IShoppingList {
-    uint256 ownerPubkey;
-    mapping (uint32 => Purchase) m_purchases;
+    mapping (uint32 => Purchase) purchases;
     uint32 purchaseNumber;
+    uint256 ownerPubkey;
 
     constructor(uint256 pubkey) public {
         require(pubkey != 0, 100);
@@ -16,50 +16,40 @@ contract ShoppingList is IShoppingList {
     }
 
     modifier checkOwnerAndAccept {
-	    require(msg.pubkey() == tvm.pubkey(), 102);
+	    require(msg.pubkey() == tvm.pubkey(), 101);
     	tvm.accept();
 	_;
     }
 
     function addPurchase(string name, uint32 quantity) override public checkOwnerAndAccept {
-        m_purchases[purchaseNumber] = Purchase(purchaseNumber, name, quantity, now, false, 0);
+        if (purchases.empty())
+            purchaseNumber = 1;
+        purchases[purchaseNumber] = Purchase(purchaseNumber, name, quantity, now, false, 0);
         purchaseNumber++;
     }
 
-    function deletePurchase(uint32 id) override public checkOwnerAndAccept {
-        delete m_purchases[id];
+    function deletePurchase(uint32 key) override public checkOwnerAndAccept {
+        require(purchases.exists(key), 102, "Wrong key.");
+        if (key == purchaseNumber - 1)
+            purchaseNumber = key;
+        delete purchases[key];
     }
 
-    function buy(uint32 id, uint32 price) override public checkOwnerAndAccept {
-        require(m_purchases.exists(id), 102, "There are no item(s) to buy for this number.");
-        m_purchases[id].isBought = true;
-        m_purchases[id].price = price;
+    function buy(uint32 key, uint32 price) override public checkOwnerAndAccept {
+        require(purchases.exists(key), 103, "Wrong key.");
+        purchases[key].isBought = true;
+        purchases[key].price = price;
     }
 
-    function getShoppingList() override public returns (Purchase[] purchases) {
-        uint32 number;
-        string name;
-        uint32 quantity;
-        uint32 createdAt;
-        bool isBought;
-        uint32 price;
-        for((, Purchase purchase) : m_purchases) 
-        {
-            number = purchase.number;
-            name = purchase.name;
-            quantity = purchase.quantity;
-            createdAt = purchase.createdAt;
-            isBought = purchase.isBought;
-            price = purchase.price;
-            purchases.push(Purchase(number, name, quantity, createdAt, isBought, price));
-       }
+    function getShoppingList() override public view returns (mapping (uint32 => Purchase)) {
+        return purchases;
     }
 
-    function getSummary() override public returns (Summary summary) {
+    function getSummary() override public returns (Summary m_summary) {
         uint32 paidPurchasesNumber;
         uint32 unpaidPurchasesNumber;
         uint32 paidAmount;
-        for((, Purchase purchase) : m_purchases) 
+        for((, Purchase purchase) : purchases) 
         {
             if (purchase.isBought == true)
             {
@@ -69,6 +59,6 @@ contract ShoppingList is IShoppingList {
             else
                 unpaidPurchasesNumber++;
         }
-        summary = Summary(paidPurchasesNumber, unpaidPurchasesNumber, paidAmount);
+        m_summary = Summary(paidPurchasesNumber, unpaidPurchasesNumber, paidAmount);
     }
 }

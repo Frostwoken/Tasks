@@ -51,7 +51,7 @@ generateAddress $DEBOT_NAME
 DEBOT_ADDRESS=$(getAddress $DEBOT_NAME)
 
 echo "Step 2. Sending tokens to address: $DEBOT_ADDRESS..."
-topUpAccount $DEBOT_ADDRESS #1>/dev/null
+topUpAccount $DEBOT_ADDRESS 1>/dev/null
 DEBOT_ABI=$(cat $DEBOT_NAME.abi.json | xxd -p -c 20000)
 DEBOT_ABI="$(echo -e "${DEBOT_ABI}" | tr -d '[:space:]')"
 echo "{\"dabi\":\"$DEBOT_ABI\"}" > $DEBOT_NAME.dabi.json

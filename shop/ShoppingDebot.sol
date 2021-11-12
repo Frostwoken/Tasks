@@ -5,18 +5,15 @@ pragma AbiHeader pubkey;
 import "DataStructures.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
-import "../debots/Menu.sol";
 import "../debots/AddressInput.sol";
-import "../debots/ConfirmInput.sol";
-import "../debots/Upgradable.sol";
 import "../debots/Sdk.sol";
 
-abstract contract ShoppingDebot is Debot, Upgradable {
+abstract contract ShoppingDebot is Debot {
     TvmCell stateInit;
-    uint userPubkey;
+    uint ownerPubkey;
     address contractAddress;
     address walletAddress;
-    Summary information;
+    Summary summary;
     uint32 constant initialBalance = 200000000; 
 
     function buildStateInit(TvmCell code, TvmCell data) public {
@@ -33,9 +30,9 @@ abstract contract ShoppingDebot is Debot, Upgradable {
         (uint result, bool status) = stoi("0x" + value);
         if (status == true) 
         {
-            userPubkey = result;
+            ownerPubkey = result;
             Terminal.print(0, "Checking if you already have a shopping list...");
-            TvmCell deployState = tvm.insertPubkey(stateInit, userPubkey);
+            TvmCell deployState = tvm.insertPubkey(stateInit, ownerPubkey);
             contractAddress = address.makeAddrStd(0, tvm.hash(deployState));
             Terminal.print(0, format("Your shopping list contract address is {}", contractAddress));
             Sdk.getAccountType(tvm.functionId(checkAccountType), contractAddress);
@@ -75,8 +72,8 @@ abstract contract ShoppingDebot is Debot, Upgradable {
         }();
     }
 
-    function setSummary(Summary summary) public {
-        information = summary;
+    function setSummary(Summary m_summary) public {
+        summary = m_summary;
         showMenu();
     }
 
@@ -114,8 +111,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
     }
 
     function deploy() private {
-        Terminal.print(0, format("Deploying..."));
-        TvmCell deployState = tvm.insertPubkey(stateInit, userPubkey);
+        TvmCell deployState = tvm.insertPubkey(stateInit, ownerPubkey);
         optional(uint256) none;
         TvmCell deployMsg = tvm.buildExtMsg({
             abiVer: 2,
@@ -127,10 +123,9 @@ abstract contract ShoppingDebot is Debot, Upgradable {
             sign: true,
             pubkey: none,
             stateInit: deployState,
-            call: {HasConstructorWithPubKey, userPubkey}
+            call: {HasConstructorWithPubKey, ownerPubkey}
         });
         tvm.sendrawmsg(deployMsg, 1);
-        Terminal.print(0, format("Done!"));
         onSuccess();
     }
 
@@ -151,11 +146,7 @@ abstract contract ShoppingDebot is Debot, Upgradable {
 
     function showMenu() internal virtual;
 
-    function onCodeUpgrade() internal override {
-        tvm.resetStorage();
-    }
-
     function getRequiredInterfaces() public view override returns (uint256[] interfaces) {
-        return [ Terminal.ID, Menu.ID, AddressInput.ID, ConfirmInput.ID ];
+        return [ Terminal.ID, AddressInput.ID ];
     }
 }
