@@ -2,7 +2,7 @@ pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
-import "DataStructures.sol";
+import "Header.sol";
 
 contract ShoppingList is IShoppingList {
     mapping (uint32 => Purchase) purchases;

@@ -2,7 +2,7 @@ pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
-import "DataStructures.sol";
+import "Header.sol";
 import "../debots/Debot.sol";
 import "../debots/Terminal.sol";
 import "../debots/AddressInput.sol";
